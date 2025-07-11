@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import IEDCLogo from '/iedc-logo-inverted.jpg'; // Inverted logo image
 
 const usedIds = new Set();
 
@@ -40,10 +41,13 @@ export default function IDGenerator() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-white p-4">
       <Card className="w-full max-w-md">
         <CardContent className="space-y-4">
-          <h1 className="text-2xl font-bold text-center">IEDC Premium Membership ID Generator</h1>
+          <div className="flex justify-center">
+            <img src={IEDCLogo} alt="IEDC RIT Logo" className="w-24 h-24 object-contain" />
+          </div>
+          <h1 className="text-2xl font-bold text-center text-black">IEDC Premium Membership ID Generator</h1>
           <p className="text-sm text-gray-600 text-center">
             *Use your Admission Number, not Register Number.<br />Example: 22BR15182
           </p>
