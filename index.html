@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IEDC Premium ID Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 100%;
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    img.logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    p.info {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    button {
+      background-color: #0f766e;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="iedc-logo-inverted.jpg" alt="IEDC RIT Logo" class="logo" />
+    <h2>IEDC Premium ID Generator</h2>
+    <p class="info">Use Admission Number, not Register Number.<br>Example: 22BR15182</p>
+
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="text" id="dept" placeholder="Department" required>
+    <input type="text" id="semester" placeholder="Semester" required>
+    <input type="text" id="adm" placeholder="Admission Number (e.g., 22BR15182)" required>
+    <button onclick="generateID()">Generate ID</button>
+
+    <div id="output" class="result"></div>
+  </div>
+
+  <script>
+    // Map admission number to assigned unique ID
+    const studentIdMap = new Map();
+    const usedIds = new Set();
+
+    function generateID() {
+      const name = document.getElementById('name').value.trim();
+      const dept = document.getElementById('dept').value.trim();
+      const semester = document.getElementById('semester').value.trim();
+      const adm = document.getElementById('adm').value.trim().toUpperCase();
+      const output = document.getElementById('output');
+
+      if (!name || !dept || !semester || adm.length < 8) {
+        alert('Please fill all fields correctly.');
+        return;
+      }
+
+      // Return existing ID if already generated for this admission number
+      if (studentIdMap.has(adm)) {
+        output.innerText = `Your Unique ID: ${studentIdMap.get(adm)}`;
+        return;
+      }
+
+      const year = adm.slice(0, 2);
+      const branch = adm.slice(2, 4);
+      const lastTwo = adm.slice(-2);
+      const base = `IEDCRIT${year}${branch}${lastTwo}`;
+
+      let uniqueID = '';
+      for (let i = 0; i < 26; i++) {
+        const letter = String.fromCharCode(65 + i); // A-Z
+        uniqueID = base + letter;
+        if (!usedIds.has(uniqueID)) {
+          usedIds.add(uniqueID);
+          studentIdMap.set(adm, uniqueID);
+          output.innerText = `Your Unique ID: ${uniqueID}`;
+          return;
+        }
+      }
+
+      output.innerText = 'Error: ID limit reached for this admission group.';
+    }
+  </script>
+</body>
+</html>
